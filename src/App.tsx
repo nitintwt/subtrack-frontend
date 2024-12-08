@@ -1,10 +1,11 @@
 import './App.css'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   return (
     <>
     <div>
-      <a href="/api/v1/user/googleOAuth">Login</a>
+      <Dashboard/>
     </div>
     </>
   )
