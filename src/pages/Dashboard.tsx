@@ -16,7 +16,7 @@ export default function Dashboard() {
     const fetchUserDetails = async ()=>{
       try {
         const user = await axios.get(`/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
-        if(!user?.data?.tokens && code){
+        if( code){
           const createGoogleTokens = await axios.post(`/api/v1/user/googleLogin?code=${code}`, {userId: cookies.userData.id})
           console.log( "Token created",createGoogleTokens )
         }
@@ -28,6 +28,16 @@ export default function Dashboard() {
     }
     if (code) fetchUserDetails()
   },[])
+
+  const getEmails = async ()=>{
+    try {
+      const emails = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
+      console.log("emails" , emails)
+    } catch (error:any) {
+      console.log("Something went wrong while fetching emails" , error)
+    }
+
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -44,6 +54,11 @@ export default function Dashboard() {
               <div className="mt-8">
                 <Button >
                   <Link to="/api/v1/user/googleOAuth">Login</Link>
+                </Button>
+              </div>
+              <div>
+                <Button onClick={getEmails}>
+                  Fetch Emails
                 </Button>
               </div>
             </>
