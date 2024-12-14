@@ -1,77 +1,57 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
-import Button from '../components/ui/Button'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { useCookies } from 'react-cookie'
+import { useState, useMemo } from 'react'
+import TotalCard from '../components/Dashboard/TotalCard';
+import SubscriptionCard from '../components/Dashboard/SubscriptionCard';
+import {Calendar, DollarSign } from 'lucide-react'
+import { div } from 'framer-motion/client';
+
+interface Subscription {
+  id: string
+  name: string
+  amount: number
+  renewalDate: Date
+  type: 'monthly' | 'yearly'
+  notificationActive: boolean
+}
+
+const mockSubscriptions: Subscription[] = [
+  { id: '1', name: 'Netflix', amount: 15.99, renewalDate: new Date('2024-05-15'), type: 'monthly', notificationActive: false },
+  { id: '2', name: 'Spotify', amount: 9.99, renewalDate: new Date('2024-04-30'), type: 'monthly', notificationActive: true },
+  { id: '3', name: 'Amazon Prime', amount: 119, renewalDate: new Date('2025-01-01'), type: 'yearly', notificationActive: false },
+  { id: '4', name: 'Adobe Creative Cloud', amount: 52.99, renewalDate: new Date('2024-06-10'), type: 'monthly', notificationActive: true },
+  { id: '5', name: 'Microsoft 365', amount: 69.99, renewalDate: new Date('2025-03-15'), type: 'yearly', notificationActive: false },
+]
+
 
 export default function Dashboard() {
-  const [cookies]= useCookies()
-  const [isProcessing , setIsProcessing]= useState(false)
-  const navigate = useNavigate()
-  console.log("cookies" , cookies)
+  const [subscriptions, setSubscriptions] = useState(mockSubscriptions)
 
-  useEffect(()=>{
-    const query = new URLSearchParams(location.search);
-    const code = query.get('code');
-    const fetchUserDetails = async ()=>{
-      try {
-        const user = await axios.get(`/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
-        if( code){
-          const createGoogleTokens = await axios.post(`/api/v1/user/googleLogin?code=${code}`, {userId: cookies.userData.id})
-          console.log( "Token created",createGoogleTokens )
-        }
-        query.delete("code")
-        navigate(window.location.pathname, { replace: true });
-      } catch (error:any) {
-        console.log("Something went wrong fetching user data" , error)
-      }
-    }
-    if (code) fetchUserDetails()
-  },[])
-
-  const getEmails = async ()=>{
-    try {
-      const emails = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
-      console.log("emails" , emails)
-    } catch (error:any) {
-      console.log("Something went wrong while fetching emails" , error)
-    }
-
+  const handleNotificationToggle = (id: string) => {
+    setSubscriptions(prevSubscriptions =>
+      prevSubscriptions.map(sub =>
+        sub.id === id ? { ...sub, notificationActive: !sub.notificationActive } : sub
+      )
+    )
   }
 
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 text-center">
-          {!isProcessing ? (
-            <>
-              <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-                Welcome to SubTrack
-              </h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Easily track and manage all your subscriptions from your Gmail account.
-              </p>
-              <div className="mt-8">
-                <Button >
-                  <Link to="/api/v1/user/googleOAuth">Login</Link>
-                </Button>
-              </div>
-              <div>
-                <Button onClick={getEmails}>
-                  Fetch Emails
-                </Button>
-              </div>
-            </>
-          ) : (
-            <div className="space-y-4">
-              <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin mx-auto"></div>
-              <p className="text-xl font-semibold text-gray-700">
-                Processing your email data... Please wait.
-              </p>
-            </div>
-          )}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12">
+          <TotalCard title="Monthly Total" amount={244} />
+          <TotalCard title="Yearly Total" amount={1993}  />
         </div>
-      </main>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {subscriptions.map(subscription => (
+            <SubscriptionCard 
+              key={subscription.id} 
+              subscription={subscription} 
+              onNotificationToggle={handleNotificationToggle}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
+
