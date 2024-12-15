@@ -7,17 +7,17 @@ import Dashboard from './pages/Dashboard.tsx'
 import { NextUIProvider } from '@nextui-org/react'
 import LoginBox from './components/Login/LoginBox.tsx'
 import SignupBox from './components/Signup/SignupBox.tsx'
+import ProcessingPage from './pages/ProcessingPage.tsx'
+import Landing from './pages/Landing.tsx'
+import AuthPageLayout from './AuthPageLayout.tsx'
+import AuthLayout from './AuthLayout.tsx'
 
 
 const router = createBrowserRouter([
   {
     path:"",
-    element:<Layout/>,
+    element:<AuthPageLayout/>,
     children:[
-      {
-        path:"/",
-        element:<Dashboard/>
-      },
       {
         path:"/register",
         element:<SignupBox/>
@@ -25,6 +25,27 @@ const router = createBrowserRouter([
       {
         path:"/login",
         element:<LoginBox/>
+      }
+    ]
+  },
+  {
+    path:"/",
+    element:<Layout/>,
+    children:[
+      {
+        path:"/",
+        element:<Landing/>
+      },
+      {
+        path:"/processing",
+        element:<ProcessingPage/>
+      },
+      {
+        path:'/dashboard',
+        element:
+        <AuthLayout>
+          <Dashboard/>
+        </AuthLayout>
       }
     ]
   }

@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import TotalCard from '../components/Dashboard/TotalCard';
 import SubscriptionCard from '../components/Dashboard/SubscriptionCard';
-import {Calendar, DollarSign } from 'lucide-react'
-import { div } from 'framer-motion/client';
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
+
 
 interface Subscription {
   id: string
@@ -24,6 +26,9 @@ const mockSubscriptions: Subscription[] = [
 
 export default function Dashboard() {
   const [subscriptions, setSubscriptions] = useState(mockSubscriptions)
+  const [cookies]= useCookies()
+  const [isProcessing , setIsProcessing]= useState(false)
+  const navigate = useNavigate()
 
   const handleNotificationToggle = (id: string) => {
     setSubscriptions(prevSubscriptions =>
@@ -33,9 +38,38 @@ export default function Dashboard() {
     )
   }
 
+  useEffect(()=>{
+    const query = new URLSearchParams(location.search);
+    const code = query.get('code');
+    const fetchUserDetails = async ()=>{
+      try {
+        const user = await axios.get(`/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
+        if( code){
+          const createGoogleTokens = await axios.post(`/api/v1/user/googleLogin?code=${code}`, {userId: cookies.userData.id})
+          console.log( "Token created",createGoogleTokens )
+        }
+        query.delete("code")
+        navigate(window.location.pathname, { replace: true });
+      } catch (error:any) {
+        console.log("Something went wrong fetching user data" , error)
+      }
+    }
+    if (code) fetchUserDetails()
+  },[])
+
+  const getEmails = async ()=>{
+    setIsProcessing(true)
+    try {
+      const emails = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
+      console.log("emails" , emails)
+    } catch (error:any) {
+      console.log("Something went wrong while fetching emails" , error)
+    }
+  }
+
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
+    <div className="min-h-screen bg-blue-100 py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12">
           <TotalCard title="Monthly Total" amount={244} />

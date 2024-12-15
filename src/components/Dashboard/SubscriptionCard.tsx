@@ -24,7 +24,7 @@ function SubscriptionCard({ subscription, onNotificationToggle }: { subscription
           </CardHeader>
         </div>
       </CardHeader>
-      <CardBody className="pt-2">
+      <CardBody className="pt-2 pl-6">
         <p className="text-2xl font-bold text-blue-600">${subscription.amount.toFixed(2)}</p>
         <Chip className="bg-blue-100 text-blue-600 px-2  text-sm font-medium mt-1 mb-1" >
               monthly
@@ -33,7 +33,7 @@ function SubscriptionCard({ subscription, onNotificationToggle }: { subscription
           Renews on {subscription.renewalDate.toLocaleDateString()}
         </p>
       </CardBody>
-      <CardFooter>
+      <CardFooter className='pl-5'>
         <Button 
           
           className={`w-full transition-colors duration-300 ${subscription.notificationActive ? 'bg-white text-blue-600 border-blue-600 hover:bg-blue-50' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
