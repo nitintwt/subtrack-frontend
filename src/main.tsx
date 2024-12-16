@@ -10,20 +10,19 @@ import SignupBox from './components/Signup/SignupBox.tsx'
 import ProcessingPage from './pages/ProcessingPage.tsx'
 import Landing from './pages/Landing.tsx'
 import AuthPageLayout from './AuthPageLayout.tsx'
-import AuthLayout from './AuthLayout.tsx'
 
 
 const router = createBrowserRouter([
   {
-    path:"",
+    path:"/auth",
     element:<AuthPageLayout/>,
     children:[
       {
-        path:"/register",
+        path:"register",
         element:<SignupBox/>
       },
       {
-        path:"/login",
+        path:"login",
         element:<LoginBox/>
       }
     ]
@@ -42,10 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/dashboard',
-        element:
-        <AuthLayout>
-          <Dashboard/>
-        </AuthLayout>
+        element: <Dashboard/>
       }
     ]
   }

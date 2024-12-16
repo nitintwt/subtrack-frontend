@@ -1,7 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {Link as NLink, Button} from "@nextui-org/react";
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import UserAvatar from './UserAvatar';
 
 export default function Header() {
+  const [cookies , removeCookie]:any = useCookies()
+  const navigate = useNavigate()
+
+  const handleLogout = async ()=>{
+    try {
+      await axios.post("/api/v1/auth/logout", {userId:cookies?.userData?.id})
+      removeCookie("userData")
+      navigate("/")
+    } catch (error) {
+      console.log("Something went wrong" , error)
+    }
+  }
   return (
     <nav className="bg-white shadow-md">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,12 +27,16 @@ export default function Header() {
             </Link>
           </div>
           <div className="flex items-center">
-            <Button variant="bordered" className="mr-2" color='primary'as={NLink} href='/login'>
+            {cookies?.userData?.id ? <UserAvatar/>
+            :  
+            <>
+            <Button variant="bordered" className="mr-2" color='primary'as={NLink} href='/auth/login'>
               Log in
             </Button>
-            <Button color='primary' as={NLink} href='/register'>
+            <Button color='primary' as={NLink} href='/auth/register'>
               Sign up
             </Button>
+            </>}
           </div>
         </div>
       </div>

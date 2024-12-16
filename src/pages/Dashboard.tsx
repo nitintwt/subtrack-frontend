@@ -29,6 +29,7 @@ export default function Dashboard() {
   const [cookies]= useCookies()
   const [isProcessing , setIsProcessing]= useState(false)
   const navigate = useNavigate()
+  console.log(cookies)
 
   const handleNotificationToggle = (id: string) => {
     setSubscriptions(prevSubscriptions =>

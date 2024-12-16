@@ -10,6 +10,7 @@ export default function LoginBox() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
   const [cookies , setCookies]= useCookies()
+  console.log("cookies", cookies)
   
 
   const handleSubmit = async ()=>{
@@ -19,10 +20,10 @@ export default function LoginBox() {
         password:password
       })
       console.log("login" , login)
-      setCookies("userData",{id:login?.data?.data?.id , email:login?.data?.data?.email , name:login?.data?.data?.name})
+      setCookies("userData",{id:login?.data?.data?.id , email:login?.data?.data?.email , name:login?.data?.data?.name}, {path:"/"})
       toast.success("Login successfull")
       setTimeout(()=>{
-        navigate("/")
+        navigate("/dashboard")
       }, 1000)
     } catch (error:any) {
       console.log("Something went wrong while login" , error)
