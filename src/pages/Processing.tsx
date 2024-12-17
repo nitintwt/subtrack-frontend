@@ -1,7 +1,6 @@
 import { Loader2 } from 'lucide-react'
 
-
-function ProcessingPage() {
+function Processing() {
   return (
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
     <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
@@ -16,4 +15,4 @@ function ProcessingPage() {
   )
 }
 
-export default ProcessingPage
+export default Processing

@@ -1,15 +1,15 @@
 import {Card, CardHeader, CardBody} from "@nextui-org/card";
-import { SlCalender } from "react-icons/sl";
+import { Users } from 'lucide-react'
 
 function TotalCard({ title, amount }: { title: string; amount: number }) {
   return (
-    <Card className="bg-blue-200 shadow-md transition-all duration-300 hover:shadow-lg">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardHeader className="text-sm font-medium text-black">{title}</CardHeader>
-        <SlCalender/>
+        <CardHeader className="text-sm font-medium">{title}</CardHeader>
+        <Users className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardBody>
-        <div className="text-3xl font-bold text-blue-600">${amount.toFixed(2)}</div>
+        <div className="text-2xl font-bold">{amount}</div>
       </CardBody>
     </Card>
   )

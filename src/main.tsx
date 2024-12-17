@@ -7,7 +7,6 @@ import Dashboard from './pages/Dashboard.tsx'
 import { NextUIProvider } from '@nextui-org/react'
 import LoginBox from './components/Login/LoginBox.tsx'
 import SignupBox from './components/Signup/SignupBox.tsx'
-import ProcessingPage from './pages/ProcessingPage.tsx'
 import Landing from './pages/Landing.tsx'
 import AuthPageLayout from './AuthPageLayout.tsx'
 
@@ -34,10 +33,6 @@ const router = createBrowserRouter([
       {
         path:"/",
         element:<Landing/>
-      },
-      {
-        path:"/processing",
-        element:<ProcessingPage/>
       },
       {
         path:'/dashboard',
