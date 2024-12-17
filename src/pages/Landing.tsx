@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 function Landing() {
   const [cookies]= useCookies()
   const navigate = useNavigate()
-  console.log("lanfing cookies",cookies?.userData?.id)
+  console.log("lanfing cookies",cookies)
 
   useEffect(()=>{
     if(cookies?.userData?.id){

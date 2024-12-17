@@ -21,6 +21,7 @@ export default function LoginBox() {
       })
       console.log("login" , login)
       setCookies("userData",{id:login?.data?.data?.id , email:login?.data?.data?.email , name:login?.data?.data?.name}, {path:"/"})
+      if(login?.data?.data?.tokens) setCookies("token" , {token:true}, {path:"/"})
       toast.success("Login successfull")
       setTimeout(()=>{
         navigate("/dashboard")
