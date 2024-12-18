@@ -22,37 +22,37 @@ function SubscriptionsTable({ subscriptions }: { subscriptions: Subscription[] }
   return (
     <Card>
       <CardHeader>
-        <CardHeader>Subscription Details</CardHeader>
+        Subscription Details
       </CardHeader>
       <CardBody>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableColumn>Service</TableColumn>
-              <TableColumn>Amount</TableColumn>
-              <TableColumn>Frequency</TableColumn>
-              <TableColumn>Next Billing Date</TableColumn>
-              <TableColumn>Action</TableColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {subscriptions?.map((sub) => (
-            <TableRow key={sub?.subscription_name}>
-              <TableCell>{sub?.subscription_name || "na"}</TableCell>
-              <TableCell>{sub?.amount || "NA"}</TableCell>
-              <TableCell>{sub?.frequency || "NA"}</TableCell>
-              <TableCell>{sub?.renewal_date || "na"}</TableCell>
-              <TableCell>
-                  <Button variant="ghost" size="sm" onClick={handleDelete}>
+        <div className="space-y-4">
+          <div className="grid grid-cols-5 gap-4 font-semibold text-sm">
+            <div>Email</div>
+            <div>Plan</div>
+            <div>Status</div>
+            <div>Next Billing Date</div>
+            <div>Action</div>
+          </div>
+          {subscriptions.map((sub: any) => (
+            <div key={sub?.subscription_name} className="grid grid-cols-5 gap-4 items-center text-sm py-2 border-b last:border-b-0">
+              <div className="truncate">{sub?.subscription_name || "na"}</div>
+              <div>{sub?.amount || "NA"}</div>
+              <div>
+                {sub?.frequency || "NA"}
+              </div>
+              <div>{sub?.renewal_date || "na"}</div>
+              <div>
+                <form >
+                  <Button variant="ghost" size="sm">
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
-              </TableCell>
-            </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                </form>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardBody>
-    </Card>
+  </Card>
     
   )
 }

@@ -7,12 +7,12 @@ import { Button , Link as Nlink } from '@nextui-org/react';
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 import Processing from './Processing';
 import SubscriptionsTable from '../components/Dashboard/SubscriptionsTable';
+import { div } from 'framer-motion/client';
 
 
 export default function Dashboard() {
   const [subscriptions, setSubscriptions] = useState([])
   const [cookies , setCookies]= useCookies()
-  const [isToken , setIsToken]= useState(false)
   const [isProcessing , setIsProcessing]= useState(false)
   const navigate = useNavigate()
   console.log("dashboard",cookies)
@@ -38,7 +38,11 @@ export default function Dashboard() {
     setIsProcessing(true)
     try {
       const response = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
+      const isArray = Array.isArray(response?.data?.data)
+      console.log("response isarray" , isArray)
       const subscriptions = JSON.parse(response?.data?.data)
+      const isArray2 = Array.isArray(subscriptions)
+      console.log("response isarray2" , isArray2)
       console.log(subscriptions)
       setSubscriptions(subscriptions)
       setIsProcessing(false)
@@ -48,15 +52,20 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-100 py-12">
+    <div className="container mx-auto p-4">
+      <div className="space-y-6">
       {isProcessing ? (
         <Processing/>
       ) :(
         subscriptions.length > 0 ? (
+          <>
           <div className="grid gap-4 md:grid-cols-3">
-            <TotalCard title='otal Subscriptions' amount={10}/>
-            <SubscriptionsTable subscriptions={subscriptions}/>
+            <TotalCard title='Total Subscriptions' amount={10}/>
+            <TotalCard title='Total Subscriptions' amount={10}/>
+            <TotalCard title='Total Subscriptions' amount={10}/>
           </div>
+          <SubscriptionsTable subscriptions={subscriptions}/>
+          </>
           ):(
             cookies.token ? (
               <Card className='m-3'>
@@ -88,6 +97,7 @@ export default function Dashboard() {
             </Card>
             ))
       )}
+    </div>
     </div>
   )
 }
