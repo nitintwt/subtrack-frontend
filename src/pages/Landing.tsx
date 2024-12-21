@@ -26,7 +26,7 @@ function Landing() {
             Manage Your Subscriptions with Ease
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-xl">
-            Subtrack uses AI-powered email integration to automatically detect and manage your subscriptions, saving you time and money.
+            Subtrack uses AI powered email integration to automatically detect and manage your subscriptions, saving you time and money.
           </p>
           <div className="mt-10">
             <Button size="lg" radius="md" className="text-blue-600 bg-white hover:bg-gray-100 font-bold" as={Link} href="/auth/register">

@@ -1,13 +1,12 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useState} from 'react'
 import TotalCard from '../components/Dashboard/TotalCard';
-import { Link, useNavigate } from 'react-router-dom'
+import {useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { Button , Link as Nlink } from '@nextui-org/react';
-import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
+import {Card, CardHeader, CardBody} from "@nextui-org/card";
 import Processing from './Processing';
 import SubscriptionsTable from '../components/Dashboard/SubscriptionsTable';
-import { div } from 'framer-motion/client';
 
 
 export default function Dashboard() {
@@ -15,7 +14,6 @@ export default function Dashboard() {
   const [cookies , setCookies]= useCookies()
   const [isProcessing , setIsProcessing]= useState(false)
   const navigate = useNavigate()
-  console.log("dashboard",cookies)
 
   useEffect(()=>{
     const query = new URLSearchParams(location.search);
@@ -33,17 +31,19 @@ export default function Dashboard() {
     if (code) createToken()
   },[])
 
+  useEffect(()=>{
+    const fethcSubsciptions = async ()=>{
+      const response = await axios.get(`/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
+      setSubscriptions(response.data.data.subscriptions)
+    }
+    fethcSubsciptions()
+  },[])
 
   const getSubscriptions = async ()=>{
     setIsProcessing(true)
     try {
       const response = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
-      const isArray = Array.isArray(response?.data?.data)
-      console.log("response isarray" , isArray)
       const subscriptions = JSON.parse(response?.data?.data)
-      const isArray2 = Array.isArray(subscriptions)
-      console.log("response isarray2" , isArray2)
-      console.log(subscriptions)
       setSubscriptions(subscriptions)
       setIsProcessing(false)
     } catch (error:any) {
@@ -60,9 +60,9 @@ export default function Dashboard() {
         subscriptions.length > 0 ? (
           <>
           <div className="grid gap-4 md:grid-cols-3">
-            <TotalCard title='Total Subscriptions' amount={10}/>
-            <TotalCard title='Total Subscriptions' amount={10}/>
-            <TotalCard title='Total Subscriptions' amount={10}/>
+            <TotalCard title='Total Subscriptions' amount={subscriptions.length}/>
+            <TotalCard title='Total Monthly Bill' amount={4503}/>
+            <TotalCard title='Total Yearly Bill' amount={8006}/>
           </div>
           <SubscriptionsTable subscriptions={subscriptions}/>
           </>
