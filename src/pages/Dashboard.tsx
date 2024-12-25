@@ -16,6 +16,12 @@ export default function Dashboard() {
   const navigate = useNavigate()
 
   useEffect(()=>{
+    if(!cookies?.userData?.id){
+      navigate("/")
+    }
+  },[])
+
+  useEffect(()=>{
     const query = new URLSearchParams(location.search);
     const code = query.get('code');
     const createToken = async ()=>{
@@ -43,11 +49,11 @@ export default function Dashboard() {
     setIsProcessing(true)
     try {
       const response = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
-      const subscriptions = JSON.parse(response?.data?.data)
-      setSubscriptions(subscriptions)
+      setSubscriptions(response.data.data)
       setIsProcessing(false)
     } catch (error:any) {
-      console.log("Something went wrong while fetching emails" , error)
+      setIsProcessing(false)
+      console.log("Something went wrong while fetching subscriptions" , error)
     }
   }
 

@@ -4,6 +4,7 @@ import {Trash2 , BellRing } from 'lucide-react'
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useState } from "react";
+import { calculateRenewalDate } from "../../utils/calculateRenewalDate";
 
 function SubscriptionRow({sub}:any) {
   const [cookies]= useCookies()
@@ -18,14 +19,19 @@ function SubscriptionRow({sub}:any) {
     }
   }
 
+  const nextRenewalDate:any = calculateRenewalDate(sub.lastRenewalDate , sub.frequency)
+
+  // took out the date part
+  const formattedDate = nextRenewalDate.toISOString().slice(0, 10);
+
   return (
     <Fragment>
       <div className="truncate">{sub?.service || "na"}</div>
-        <div>{sub?.amount || "NA"}</div>
+        <div>{sub?.amount}</div>
         <div>
-          {sub?.frequency || "NA"}
+          {sub?.frequency}
         </div>
-        <div>{sub?.renewalDate || "na"}</div>
+        <div>{formattedDate}</div>
         <div>
           <form >
             {isDeleted ? (
