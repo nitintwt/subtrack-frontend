@@ -19,7 +19,7 @@ export default function SignupBox() {
       })
       toast.success("User registered successfully")
       setTimeout(()=>{
-        navigate("/login")
+        navigate("/auth/login")
       }, 1000)
     } catch (error:any) {
       console.log("Something went wrong while registering user" , error)
@@ -38,7 +38,7 @@ export default function SignupBox() {
             Already have an account?
             <Link
               className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-500 dark:hover:text-indigo-400"
-              to="/login"
+              to="/auth/login"
             >
               Login
             </Link>

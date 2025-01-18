@@ -23,7 +23,7 @@ export default function UserAvatar() {
     try {
       await axios.post("/api/v1/auth/logout", {userId:cookies?.userData?.id})
       removeCookie("userData")
-      removeCookie("token")
+      removeCookie("token", { path: "/" });
       navigate("/")
     } catch (error) {
       console.log("Something went wrong" , error)

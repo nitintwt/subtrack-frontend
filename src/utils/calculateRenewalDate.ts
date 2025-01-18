@@ -10,6 +10,5 @@ export const  calculateRenewalDate =(lastRenewalDate: any, frequency: string):Da
       throw new Error("Unsupported frequency");
     }
   }
-
   return nextRenewalDate;
 }
