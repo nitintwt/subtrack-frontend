@@ -33,7 +33,7 @@ export default function Dashboard() {
         query.delete("code")
         navigate(window.location.pathname, { replace: true });
       } catch (error:any) {
-        console.log("Something went wrong fetching user data" , error)
+        console.log("Something went wrong fetching user data")
       }
     }
     if (code) createToken()
@@ -50,12 +50,12 @@ export default function Dashboard() {
   const getSubscriptions = async ()=>{
     setIsProcessing(true)
     try {
-      const response = await axios.get(`/api/v1/user/subscriptionsData?userId=${cookies.userData.id}`)
+      const response = await axios.get(`/api/v1/user/subscriptions?userId=${cookies.userData.id}`)
       setSubscriptions(response.data.data)
       setIsProcessing(false)
     } catch (error:any) {
       setIsProcessing(false)
-      console.log("Something went wrong while fetching subscriptions" , error)
+      toast.error("Something went wrong. Try again")
     }
   }
 
@@ -68,11 +68,6 @@ const totalMonthly = subscriptions?.reduce((acc:any, sub:any) => {
 }, 0)
 
 const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.category))]
-
-
-  const handleToggleNotification = () => {
-    toast.warning('Notification feature is under development')
-  }
 
   return (
     <div className="container mx-auto p-4">
@@ -142,7 +137,6 @@ const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.catego
               <SubscriptionCard
                 key={subscription.id}
                 subscription={subscription}
-                handleToggleNotification={handleToggleNotification}
               />
             ))}
             {filteredSubscriptions?.length === 0 && (

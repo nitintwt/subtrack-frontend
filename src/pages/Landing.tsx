@@ -18,6 +18,7 @@ function Landing() {
       navigate("/dashboard")
     }
   },[])
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <section className="bg-blue-600 text-white">

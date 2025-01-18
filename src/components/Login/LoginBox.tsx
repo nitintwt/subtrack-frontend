@@ -4,14 +4,15 @@ import { Button} from '@nextui-org/button';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
+import {Input} from "@nextui-org/input";
+import { Link} from 'react-router-dom';
 
 export default function LoginBox() {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
-  const [cookies , setCookies]= useCookies()
-  console.log("cookies", cookies)
-  
+  const [cookies , setCookies]= useCookies()  
 
   const handleSubmit = async ()=>{
     try {
@@ -19,7 +20,6 @@ export default function LoginBox() {
         email:email,
         password:password
       })
-      console.log("login" , login)
       setCookies("userData",{id:login?.data?.data?.id , email:login?.data?.data?.email , name:login?.data?.data?.name}, {path:"/"})
       if(login?.data?.data?.tokens) setCookies("token" , {token:true}, {path:"/"})
       toast.success("Login successfull")
@@ -27,71 +27,60 @@ export default function LoginBox() {
         navigate("/dashboard")
       }, 1000)
     } catch (error:any) {
-      console.log("Something went wrong while login" , error)
-      toast.error(error?.response?.data?.data)
+      toast.error(error?.response?.data?.message)
     }
   }
 
   return (
-    <div className="flex min-h-[100dvh]  justify-center bg-gray-950 px-4 py-12 ">
-      <div className="mx-auto w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-50 ">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-400 ">
-            Enter your email and password to log in to your account.
-          </p>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <Card className="w-full max-w-md bg-black text-white border border-gray-800">
+      <CardHeader className="space-y-1 grid justify-center">
+        <h2 className="text-2xl font-bold text-center text-blue-500">Log in</h2>
+        <p className="text-center text-gray-400">
+          Enter your credentials to access your account
+        </p>
+      </CardHeader>
+      <CardBody className="space-y-4">
+        <div className="space-y-2">
+          <h3 className="text-gray-300">Email</h3>
+          <Input 
+            id="email" 
+            type="email" 
+            radius='sm'
+            variant='bordered'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required 
+            className="bg-gray-900 border-gray-700 text-white placeholder-gray-500"
+          />
         </div>
-        <div>
-          <h2
-            className="block text-sm font-medium text-gray-300 "
-          >
-            Email address
-          </h2>
-          <div className="mt-1">
-            <input
-              autoComplete="email"
-              className="block w-full appearance-none rounded-md border text-white border-gray-700 px-3 py-2 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500  bg-gray-950 "
-              id="email"
-              name="email"
-              required
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        <div className="space-y-2">
+          <h3 className="text-gray-300">Password</h3>
+          <Input 
+            id="password" 
+            type="password" 
+            required 
+            radius='sm'
+            variant='bordered'
+            className="bg-gray-900 border-gray-700 text-white"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
-        <div>
-          <h2
-            className="block text-sm font-medium text-gray-300 "
-          >
-            Password
-          </h2>
-          <div className="mt-1">
-            <input
-              autoComplete="current-password"
-              className="block w-full appearance-none rounded-md border text-white border-gray-700 px-3 py-2 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500  bg-gray-950 "
-              id="password"
-              name="password"
-              required
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button
-          color="primary"
-          size="lg"
-          variant="shadow"
-          className=" w-full"
-          onClick={handleSubmit}
-        >
-          Login
+      </CardBody>
+      <CardFooter className="flex flex-col space-y-4">
+        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSubmit}>
+          Log In
         </Button>
-      </div>
-      <Toaster position="bottom-center" />
-    </div>
-  );
+        <div className="text-sm text-center text-gray-400">
+          Don't have an account?{' '}
+          <Link to="/auth/register" className="text-blue-400 hover:underline">
+            Sign up
+          </Link>
+        </div>
+      </CardFooter>
+    </Card>
+    <Toaster position='bottom-center'/>
+  </div>
+  )
 }

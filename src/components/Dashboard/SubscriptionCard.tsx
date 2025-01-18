@@ -1,16 +1,37 @@
-
-import { Bell, BellOff, Calendar, DollarSign, RefreshCw, Tag } from 'lucide-react';
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { useState } from "react";
+import { Bell, BellOff, Calendar, DollarSign, RefreshCw, Tag , Trash2 } from 'lucide-react';
 import { calculateRenewalDate } from "../../utils/calculateRenewalDate";
+import { Toaster , toast } from 'sonner';
+import { memo } from "react";
 
 
-export function SubscriptionCard({ subscription , handleToggleNotification}: {subscription:any , handleToggleNotification:any}) {
-    const nextRenewalDate:any = calculateRenewalDate(subscription.lastRenewalDate , subscription.frequency)
-    console.log("next", nextRenewalDate)
+export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
+  const [cookies]= useCookies()
+  const [isDeleted , setIsDeleted]= useState(false)
+
+  const nextRenewalDate:any = calculateRenewalDate(subscription.lastRenewalDate , subscription.frequency)
   
-    // took out the date part
-    const formattedDate = nextRenewalDate?.toISOString()?.slice(0, 10);
+  // took out the date part
+  const formattedDate = nextRenewalDate?.toISOString()?.slice(0, 10)
+
+  const handleToggleNotification = (id:string)=>{
+    toast.error("Notification feature is under development.");
+  }
+
+  const handleDelete = async (id:string)=>{
+    try {
+      await axios.delete(`/api/v1/user/subscription?userId=${cookies.userData.id}&&subscriptionId=${id}`)
+      setIsDeleted(true)
+    } catch (error) {
+      console.log("Something went wrong " , error)
+      toast.success("Deleted Successfully")
+    }
+  }
 
   return (
+    <>
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-orange-500">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-4">
@@ -26,18 +47,26 @@ export function SubscriptionCard({ subscription , handleToggleNotification}: {su
             </div>
           </div>
         </div>
-        <button
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          onClick={handleToggleNotification}
-        >
-          {subscription.isNotification ? (
-            <Bell className="w-5 h-5 text-gray-400" />
-          ) : (
-            <BellOff className="w-5 h-5 text-blue-500" />
-          )}
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            onClick={()=>handleToggleNotification(subscription?.id)}
+          >
+            {subscription.isNotification ? (
+              <Bell className="w-5 h-5 text-gray-400" />
+            ) : (
+              <BellOff className="w-5 h-5 text-blue-500" />
+            )}
+          </button>
+          <button
+            onClick={()=> handleDelete(subscription?.id)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            title="Delete subscription"
+          >
+            {isDeleted ? (<Trash2 className="w-5 h-5 text-gray-400" />):(<Trash2 className="w-5 h-5 text-red-600" />)}
+          </button>
+        </div>
       </div>
-
       <div className="grid grid-cols-3 gap-4 text-sm">
         <div className="flex items-center space-x-2">
           <DollarSign className="w-4 h-4 text-gray-400" />
@@ -64,5 +93,7 @@ export function SubscriptionCard({ subscription , handleToggleNotification}: {su
         </div>
       </div>
     </div>
-  );
-}
+    <Toaster position="bottom-center"/>
+    </>
+  )
+})
