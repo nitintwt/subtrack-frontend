@@ -93,7 +93,6 @@ export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
         </div>
       </div>
     </div>
-    <Toaster position="bottom-center"/>
     </>
   )
 })

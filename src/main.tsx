@@ -8,8 +8,11 @@ import { NextUIProvider } from '@nextui-org/react'
 import LoginBox from './components/Login/LoginBox.tsx'
 import SignupBox from './components/Signup/SignupBox.tsx'
 import Landing from './pages/Landing.tsx'
+import { inject } from '@vercel/analytics'
 import AuthPageLayout from './AuthPageLayout.tsx'
 
+// for vercel analytics
+inject()
 
 const router = createBrowserRouter([
   {

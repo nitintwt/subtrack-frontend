@@ -49,11 +49,18 @@ export default function Dashboard() {
 
   const getSubscriptions = async ()=>{
     setIsProcessing(true)
+    console.log("started")
     try {
       const response = await axios.get(`/api/v1/user/subscriptions?userId=${cookies.userData.id}`)
       setSubscriptions(response.data.data)
       setIsProcessing(false)
+      console.log("ended")
+      console.log(response)
+      if (response?.data?.data) {
+        toast.warning(response?.data?.message)
+      }
     } catch (error:any) {
+      console.log(error)
       setIsProcessing(false)
       toast.error("Something went wrong. Try again")
     }
@@ -70,11 +77,11 @@ const totalMonthly = subscriptions?.reduce((acc:any, sub:any) => {
 const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.category))]
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="space-y-6">
       {isProcessing ? (
         <Processing/>
-      ) :(
+      ):(
         subscriptions?.length > 0 ? (
           <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -106,7 +113,7 @@ const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.catego
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="flex flex-col md:flex-row flex-wrap gap-4 mb-8">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
@@ -132,7 +139,7 @@ const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.catego
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2  gap-6">
             {filteredSubscriptions.map((subscription:any) => (
               <SubscriptionCard
                 key={subscription.id}
