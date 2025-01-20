@@ -28,7 +28,7 @@ export default function Dashboard() {
     const code = query.get('code');
     const createToken = async ()=>{
       try {
-        const createGoogleTokens = await axios.post(`/api/v1/user/googleLogin?code=${code}`, {userId: cookies.userData.id})
+        const createGoogleTokens = await axios.post(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/googleLogin?code=${code}`, {userId: cookies.userData.id})
         setCookies("token" ,{token:true} )
         query.delete("code")
         navigate(window.location.pathname, { replace: true });
@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   useEffect(()=>{
     const fethcSubsciptions = async ()=>{
-      const response = await axios.get(`/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
+      const response = await axios.get(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/userDetails?userId=${cookies?.userData.id}`)
       setSubscriptions(response.data.data.subscriptions)
     }
     fethcSubsciptions()
@@ -51,7 +51,7 @@ export default function Dashboard() {
     setIsProcessing(true)
     console.log("started")
     try {
-      const response = await axios.get(`/api/v1/user/subscriptions?userId=${cookies.userData.id}`)
+      const response = await axios.get(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/subscriptions?userId=${cookies.userData.id}`)
       setSubscriptions(response.data.data)
       setIsProcessing(false)
       console.log("ended")

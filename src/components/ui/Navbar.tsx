@@ -10,7 +10,7 @@ export default function Header() {
 
   const handleLogout = async ()=>{
     try {
-      await axios.post("/api/v1/auth/logout", {userId:cookies?.userData?.id})
+      await axios.post(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/auth/logout`, {userId:cookies?.userData?.id})
       removeCookie("userData")
       navigate("/")
     } catch (error) {

@@ -22,7 +22,7 @@ export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
 
   const handleDelete = async (id:string)=>{
     try {
-      await axios.delete(`/api/v1/user/subscription?userId=${cookies.userData.id}&&subscriptionId=${id}`)
+      await axios.delete(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/subscription?userId=${cookies.userData.id}&&subscriptionId=${id}`)
       setIsDeleted(true)
     } catch (error) {
       console.log("Something went wrong " , error)

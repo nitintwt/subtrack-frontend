@@ -16,7 +16,7 @@ export default function LoginBox() {
 
   const handleSubmit = async ()=>{
     try {
-      const login = await axios.post("/api/v1/auth/login" , {
+      const login = await axios.post(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/auth/login` , {
         email:email,
         password:password
       })

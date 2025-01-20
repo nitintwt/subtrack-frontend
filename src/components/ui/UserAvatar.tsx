@@ -21,7 +21,7 @@ export default function UserAvatar() {
 
   const handleLogOut = async ()=>{
     try {
-      await axios.post("/api/v1/auth/logout", {userId:cookies?.userData?.id})
+      await axios.post(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/auth/logout`, {userId:cookies?.userData?.id})
       removeCookie("userData")
       removeCookie("token", { path: "/" });
       navigate("/")
