@@ -52,17 +52,16 @@ export default function Dashboard() {
     console.log("started")
     try {
       const response = await axios.get(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/subscriptions?userId=${cookies.userData.id}`)
+      console.log(response)
       setSubscriptions(response.data.data)
       setIsProcessing(false)
       console.log("ended")
-      console.log(response)
       if (response?.data?.data) {
         toast.warning(response?.data?.message)
       }
     } catch (error:any) {
-      console.log(error)
       setIsProcessing(false)
-      toast.error("Something went wrong. Try again")
+      toast.error("No Subscription found")
     }
   }
 
@@ -70,11 +69,11 @@ export default function Dashboard() {
   ?.filter((sub:any) => sub.service.toLowerCase().includes(searchTerm.toLowerCase()))
   ?.filter((sub:any) => selectedCategory === 'all' || sub.category === selectedCategory)
 
-const totalMonthly = subscriptions?.reduce((acc:any, sub:any) => {
-  if (sub.frequency === 'monthly') return acc+Number(sub.amount)
-}, 0)
+  const totalMonthly = subscriptions?.reduce((acc:any, sub:any) => {
+    if (sub.frequency === 'monthly') return acc+Number(sub.amount)
+  }, 0)
 
-const categories = ['all', ...new Set(subscriptions?.map((sub:any) => sub.category))]
+const categories = ['all', "Productivity" , "Entertainment"]
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -1,23 +1,44 @@
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useState } from "react";
-import { Bell, BellOff, Calendar, DollarSign, RefreshCw, Tag , Trash2 } from 'lucide-react';
+import { Bell, BellOff, Calendar, DollarSign, RefreshCw, SubscriptIcon, Tag , Trash2 } from 'lucide-react';
 import { calculateRenewalDate } from "../../utils/calculateRenewalDate";
 import { Toaster , toast } from 'sonner';
 import { memo } from "react";
 
-
 export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
   const [cookies]= useCookies()
   const [isDeleted , setIsDeleted]= useState(false)
+  const [isNotify , setisNotify] = useState(subscription.isNotification)
 
   const nextRenewalDate:any = calculateRenewalDate(subscription.lastRenewalDate , subscription.frequency)
   
   // took out the date part
   const formattedDate = nextRenewalDate?.toISOString()?.slice(0, 10)
 
-  const handleToggleNotification = (id:string)=>{
+  const handleStartNotification = async (id:string)=>{
+    try {
+      const handleStart = await axios.put(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/startNotification`, {
+        subscriptionId:id
+      })
+      setisNotify(true)
+      toast.success("Notification Started")
+    } catch (error) {
+      toast.error("Something went wrong.Try again")
+    }
+  }
+
+  const handleStopNotification = async (id:string)=>{
     toast.error("Notification feature is under development.");
+    try {
+      const stop = await axios.put(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/stopNotification`, {
+        subscriptionId:id
+      })
+      setisNotify(false)
+      toast.success("Notification service stopped!")
+    } catch (error) {
+      toast.error("Something went wrong.Try again")
+    }
   }
 
   const handleDelete = async (id:string)=>{
@@ -25,7 +46,6 @@ export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
       await axios.delete(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/subscription?userId=${cookies.userData.id}&&subscriptionId=${id}`)
       setIsDeleted(true)
     } catch (error) {
-      console.log("Something went wrong " , error)
       toast.success("Deleted Successfully")
     }
   }
@@ -48,16 +68,21 @@ export const SubscriptionCard= memo(({ subscription}: {subscription:any}) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button
+          {isNotify ? (
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              onClick={()=>handleStopNotification(subscription?.id)}
+            >
+                <Bell className="w-5 h-5 text-gray-400" />
+            </button>
+          ):(
+            <button
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            onClick={()=>handleToggleNotification(subscription?.id)}
+            onClick={()=>handleStartNotification(subscription?.id)}
           >
-            {subscription.isNotification ? (
-              <Bell className="w-5 h-5 text-gray-400" />
-            ) : (
-              <BellOff className="w-5 h-5 text-blue-500" />
-            )}
+            <BellOff className="w-5 h-5 text-blue-500" />
           </button>
+          )}
           <button
             onClick={()=> handleDelete(subscription?.id)}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"

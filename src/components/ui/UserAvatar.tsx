@@ -26,7 +26,7 @@ export default function UserAvatar() {
       removeCookie("token", { path: "/" });
       navigate("/")
     } catch (error) {
-      console.log("Something went wrong" , error)
+      console.log("Something went wrong")
     }
   }
 

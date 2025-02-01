@@ -14,7 +14,7 @@ export default function Header() {
       removeCookie("userData")
       navigate("/")
     } catch (error) {
-      console.log("Something went wrong" , error)
+      console.log("Something went wrong")
     }
   }
   return (
