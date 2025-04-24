@@ -69,9 +69,12 @@ export default function Dashboard() {
   ?.filter((sub:any) => sub.service.toLowerCase().includes(searchTerm.toLowerCase()))
   ?.filter((sub:any) => selectedCategory === 'all' || sub.category === selectedCategory)
 
-  const totalMonthly = subscriptions?.reduce((acc:any, sub:any) => {
-    if (sub.frequency === 'monthly') return acc+Number(sub.amount)
-  }, 0)
+  const totalMonthly = subscriptions?.reduce((acc: any, sub: any) => {
+    if (sub.frequency === 'monthly') {
+      return acc + Number(sub.amount.replace(/[^0-9.-]+/g, ''));
+    }
+    return acc;
+  }, 0);
 
 const categories = ['all', "Productivity" , "Entertainment"]
 
@@ -89,7 +92,7 @@ const categories = ['all', "Productivity" , "Entertainment"]
                 <DollarSign className="w-8 h-8 text-blue-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Monthly Spending</p>
-                  <h3 className="text-2xl font-bold text-gray-900">{totalMonthly}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">₹{totalMonthly}</h3>
                 </div>
               </div>
             </div>
@@ -107,7 +110,7 @@ const categories = ['all', "Productivity" , "Entertainment"]
                 <Calendar className="w-8 h-8 text-orange-500" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Upcoming Renewals</p>
-                  <h3 className="text-2xl font-bold text-gray-900">{5}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">{subscriptions?.length}</h3>
                 </div>
               </div>
             </div>
