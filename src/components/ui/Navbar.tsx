@@ -1,22 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import {Link as NLink, Button} from "@nextui-org/react";
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import UserAvatar from './UserAvatar';
 
 export default function Header() {
   const [cookies , removeCookie]:any = useCookies()
-  const navigate = useNavigate()
 
-  const handleLogout = async ()=>{
-    try {
-      await axios.post(`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/auth/logout`, {userId:cookies?.userData?.id})
-      removeCookie("userData")
-      navigate("/")
-    } catch (error) {
-      console.log("Something went wrong")
-    }
-  }
   return (
     <nav className="bg-white shadow-md">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
