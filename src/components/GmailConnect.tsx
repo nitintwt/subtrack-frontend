@@ -31,7 +31,7 @@ export function GmailConnect() {
       </div>
 
       <Button
-        as={Nlink} href={`${import.meta.env.VITE_AWS_SUBTRACK}/api/v1/user/googleOAuth`}
+        as={Nlink} href={`https://subtrack-backend-4fld.onrender.com/api/v1/user/googleOAuth`}
         className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
         Connect Gmail
